@@ -24,6 +24,7 @@ steps:
           msbuildArguments: /restore /bl
           
       - task: PublishPipelineArtifact@1
+        condition: always()
         inputs:
           targetPath: '$(Pipeline.Workspace)\msbuild.binlog'
           artifact: 'msbuild.binlog'
