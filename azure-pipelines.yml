@@ -21,7 +21,7 @@ steps:
       - task: MSBuild@1
         inputs:
           solution: ./TestAndroidApp/TestAndroidApp.csproj
-          msbuildArguments: /restore /bl
+          msbuildArguments: /restore /v:d /bl
           
       - task: PublishPipelineArtifact@1
         condition: always()
