@@ -22,7 +22,7 @@ steps:
             Write-Host $error
             exit -1
         }
-        Add-Type -Path 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn\Microsoft.SqlServer.Management.IntegrationServices.dll'
+        Add-Type -Path 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.IntegrationServices.dll'
         #$SSISNamespace = "Microsoft.SqlServer.Management.IntegrationServices"
         #$null = New-Object $SSISNamespace".IntegrationServices" "connectionString"
         #$folder = $catalog.Folders
