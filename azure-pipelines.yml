@@ -14,7 +14,7 @@ steps:
           -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
         try {
           Write-Host "Loading $ssisdll"
-          #asmspy 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn'
+          Add-Type -Path 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn\Microsoft.SqlServer.Management.Sdk.Sfc'
           Add-Type -Path "$ssisdll"
         }
         catch {
