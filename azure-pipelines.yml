@@ -7,12 +7,14 @@ steps:
       targetType: 'inline'
       script: |
         $psversiontable
+        choco install asmspy
         $ssisVersion = 160
         $ssisdll = $(Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*\*\Common7\IDE\CommonExtensions\Microsoft\SSIS\$ssisVersion" `
           -Recurse -Filter 'Microsoft.SqlServer.Management.IntegrationServices.dll' `
           -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
         try {
           Write-Host "Loading $ssisdll"
+          askspy "$ssisdll"
           #Add-Type -Path $ssisdll
         }
         catch {
