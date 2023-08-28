@@ -14,7 +14,7 @@ steps:
           -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
         try {
           Write-Host "Loading $ssisdll"
-          askspy "$ssisdll"
+          asmspy "$ssisdll"
           #Add-Type -Path $ssisdll
         }
         catch {
