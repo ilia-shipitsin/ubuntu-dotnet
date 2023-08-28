@@ -6,6 +6,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
+        $psversiontable
         $ssisVersion = 160
         $ssisdll = $(Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*\*\Common7\IDE\CommonExtensions\Microsoft\SSIS\$ssisVersion" `
           -Recurse -Filter 'Microsoft.SqlServer.Management.IntegrationServices.dll' `
