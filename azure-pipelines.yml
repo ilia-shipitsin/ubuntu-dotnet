@@ -6,15 +6,15 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        $psversiontable
-        choco install asmspy
+        #$psversiontable
+        #choco install asmspy
         $ssisVersion = 160
         $ssisdll = $(Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*\*\Common7\IDE\CommonExtensions\Microsoft\SSIS\$ssisVersion" `
           -Recurse -Filter 'Microsoft.SqlServer.Management.IntegrationServices.dll' `
           -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
         try {
           Write-Host "Loading $ssisdll"
-          asmspy 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn'
+          #asmspy 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn'
           #Add-Type -Path $ssisdll
         }
         catch {
@@ -22,6 +22,7 @@ steps:
             Write-Host $error
             exit -1
         }
+        Add-Type -Path 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn\Microsoft.SqlServer.Management.IntegrationServices.dll'
         #$SSISNamespace = "Microsoft.SqlServer.Management.IntegrationServices"
         #$null = New-Object $SSISNamespace".IntegrationServices" "connectionString"
         #$folder = $catalog.Folders
