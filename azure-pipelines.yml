@@ -1,19 +1,25 @@
-
-trigger:
-- main
-
 pool:
-  vmImage: windows-latest
+  vmImage: windows-2019
 
 steps:
-
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: 'sqllocaldb create MSSQLLocalDB'
-
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: 'sqllocaldb start MSSQLLocalDB'
-
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        $ssisVersion = 160
+        $ssisdll = $(Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*\*\Common7\IDE\CommonExtensions\Microsoft\SSIS\$ssisVersion" `
+          -Recurse -Filter 'Microsoft.SqlServer.Management.IntegrationServices.dll' `
+          -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
+        try {
+          Write-Host "Loading $ssisdll"
+          #Add-Type -Path $ssisdll
+        }
+        catch {
+            Write-Host $error[0].Exception.GetBaseException().LoaderExceptions
+            Write-Host $error
+            exit -1
+        }
+        #$SSISNamespace = "Microsoft.SqlServer.Management.IntegrationServices"
+        #$null = New-Object $SSISNamespace".IntegrationServices" "connectionString"
+        #$folder = $catalog.Folders
+        #Write-Host $folder
