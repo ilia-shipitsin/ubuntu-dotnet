@@ -1,33 +1,26 @@
-trigger:
-- main
-
 pool:
-  vmImage: windows-latest
+  vmImage: windows-2019
 
 steps:
-- task: CmdLine@2
-  inputs:
-    script: |
-      choco install windows-performance-toolkit
-      "C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\xperf.exe" -start -on LOADER+PROC_THREAD+DISK_IO+HARD_FAULTS+DPC+INTERRUPT+CSWITCH+PERF_COUNTER+FILE_IO_INIT+REGISTRY
-
-- task: CmdLine@2
-  inputs:
-    script: |
-      sqllocaldb create MSSQLLocalDB
-
-- task: CmdLine@2
-  inputs:
-    script: |
-      sqllocaldb start MSSQLLocalDB
-
-- task: CmdLine@2
-  inputs:
-    script: |
-      "c:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\xperf.exe" -d $(Build.ArtifactStagingDirectory)\tmp.etl
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)\tmp.etl'
-    ArtifactName: 'etl'
-    publishLocation: 'Container'
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        $ssisVersion = 160
+        $ssisdll = $(Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*\*\Common7\IDE\CommonExtensions\Microsoft\SSIS\$ssisVersion" `
+          -Recurse -Filter 'Microsoft.SqlServer.Management.IntegrationServices.dll' `
+          -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
+        try {
+          Write-Host "Loading $ssisdll"
+          Add-Type -Path 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.Sdk.Sfc.dll'
+          Add-Type -Path $ssisdll
+        }
+        catch {
+            Write-Host $error[0].Exception.GetBaseException().LoaderExceptions
+            Write-Host $error
+            exit -1
+        }
+        $SSISNamespace = "Microsoft.SqlServer.Management.IntegrationServices"
+        $null = New-Object $SSISNamespace".IntegrationServices" "connectionString"
+        $folder = $catalog.Folders
+        Write-Host $folder
