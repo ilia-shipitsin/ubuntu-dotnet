@@ -6,7 +6,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        New-Item -Path 'c:\ssis\'' -Name '160' -ItemType Directory
+        New-Item -Path 'c:\ssis\' -Name '160' -ItemType Directory
         Copy-Item 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.Sdk.Sfc.dll' 'c:\ssis\160'
         Copy-Item 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn\Microsoft.SqlServer.Management.IntegrationServices.dll' 'c:\ssis\160'
         Add-Type -Path 'c:\ssis\160\Microsoft.SqlServer.Management.IntegrationServices.dll'
