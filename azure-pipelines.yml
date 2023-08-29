@@ -6,20 +6,11 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        $ssisVersion = 160
-        $ssisdll = $(Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*\*\Common7\IDE\CommonExtensions\Microsoft\SSIS\$ssisVersion" `
-          -Recurse -Filter 'Microsoft.SqlServer.Management.IntegrationServices.dll' `
-          -ErrorAction SilentlyContinue | Select-Object -First 1 | ForEach-Object { $_.FullName })
-        try {
-          Write-Host "Loading $ssisdll"
-          Add-Type -Path 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.Sdk.Sfc.dll'
-          Add-Type -Path $ssisdll
-        }
-        catch {
-            Write-Host $error[0].Exception.GetBaseException().LoaderExceptions
-            Write-Host $error
-            exit -1
-        }
+        New-Item -Path 'c:\ssis\'' -Name '160' -ItemType Directory
+        Copy-Item 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\Microsoft\SQLCommon\150\Microsoft.SqlServer.Management.Sdk.Sfc.dll' 'c:\ssis\160'
+        Copy-Item 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\SSIS\160\Binn\Microsoft.SqlServer.Management.IntegrationServices.dll' 'c:\ssis\160'
+        Add-Type -Path 'c:\ssis\160\Microsoft.SqlServer.Management.IntegrationServices.dll'
+        
         $SSISNamespace = "Microsoft.SqlServer.Management.IntegrationServices"
         $null = New-Object $SSISNamespace".IntegrationServices" "connectionString"
         $folder = $catalog.Folders
